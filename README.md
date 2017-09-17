@@ -23,10 +23,20 @@ import-module pass
 (New-PronounceablePassword -Length 20), 'Username: admin' -join "`n" | Add-Secret Business/cheese-whiz-factory -Force
 
 # Show secret and set 45s to clipboard
-Show-Secret Business/cheese-whiz-factory -Clipoard
+Show-Secret Business/cheese-whiz-factory -Clipboard
 
 # Show directory tree
 Show-Secret
+
+# Add anything
+ps | out-string | Add-Secret ps
+Show-Secret ps
+
+    Handles  NPM(K)    PM(K)      WS(K)     CPU(s)     Id  SI ProcessName
+    -------  ------    -----      -----     ------     --  -- -----------
+        120       8     1488       1376     397,33   7928   1 ApMsgFwd
+        132       9     1744       2428       2,88   8016   1 ApntEx
+        ...
 ```
 
 Both symmetric and keys encryption is supported. `Add-Secret` takes recipients via `.gpg-id` files in the password store or via `$GpgId` array. It can encrypt using public keys or with passphrase instead (via`$Passphrase` argument).
