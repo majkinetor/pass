@@ -22,9 +22,12 @@ First `mkdir ~\.password-store`. This is default directory and different one can
 
 # Show secret and set 45s to clipboard
 Show-Secret Business/cheese-whiz-factory -Clipoard
+
+# Show directory tree
+Show-Secret
 ```
 
-Both summetric and using keys encryption is supported. `Add-Secret` takes recipients via `.gpg-id` files in the password store or via `$GpgId` array. It can encrypt using public keys or with passphrase instead (via`$Passphrase` argument).
+Both symmetric and keys encryption is supported. `Add-Secret` takes recipients via `.gpg-id` files in the password store or via `$GpgId` array. It can encrypt using public keys or with passphrase instead (via`$Passphrase` argument).
 
 There is also quick and dirty `pass` function that implements the most basic pass syntax:
 
