@@ -14,6 +14,8 @@ First `mkdir ~\.password-store`. This is default directory and different one can
 
 ```powershell
 
+import-module pass
+
 # Add secret
 'omg so much cheese what am i gonna do' | Add-Secret Business/cheese-whiz-factory
 
