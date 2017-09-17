@@ -1,5 +1,30 @@
 <#
 .SYNOPSIS
+    Remove secret from the password store
+#>
+
+function Remove-Secret() {
+    [CmdletBinding()]
+    param(
+        # Path within password store to be removed
+        [string] $Path, 
+
+        # Path to existing password store, by default ~\.password-store
+        [ValidateNotNullOrEmpty()]
+        [ValidateScript( {Test-Path $_} )]
+        [string] $PasswordStore = "$HOME\.password-store"
+    )
+    if ('.','\.','/.' -contains $Path.Trim()) { throw 'Can not remove entire password store' }
+    if ($Path -match '\.\.') { throw 'Can not use .. when removing' }
+
+    $secret_file = Join-Path $PasswordStore $Path
+    if ((gi $secret_file) -isnot [System.IO.DirectoryInfo]) { $secret_file += '.gpg' }
+
+    rm -Force -Recurse $secret_file
+}
+
+<#
+.SYNOPSIS
     Show secret from the pass store
 
 .DESCRIPTION
@@ -85,6 +110,7 @@ function Add-Secret {
     param(
         # Path within password store
         [ValidateScript( { Test-Path -IsValid $_ } )]
+        [Parameter(Position=1, Mandatory = $true)]
         [string] $Path, 
         
         # Data to encrypt, password on the first line, whatever after it
@@ -102,13 +128,18 @@ function Add-Secret {
 
         [Parameter(ParameterSetName = 'passphrase')] 
         # Gpg passphrase used for symmetric encryption
-        [string] $Passphrase 
+        [string] $Passphrase, 
+
+        # Use to overwrite existing secrets
+        [switch] $Force
     )
 
     $options_path = [System.IO.Path]::GetTempFileName()
-    $out_file     = Join-Path $PasswordStore $Path
+    $out_file     = (Join-Path $PasswordStore $Path) + '.gpg'
     $out_file_dir = Split-Path $out_file
-    $options      = '--armor', '--always-trust', '--batch', '--yes', '--quiet', "--output $out_file.gpg"
+    $options      = '--armor', '--always-trust', '--batch', '--yes', '--quiet', "--output $out_file"
+
+    if ((Test-Path $out_file) -and !$Force) { throw 'Secret already exists. Use Force to overwrite' }
 
     if ($PsCmdlet.ParameterSetName -eq 'gpgid') 
     {
@@ -131,5 +162,33 @@ function Add-Secret {
     Write-Verbose "gpg $gpg_args"
 
     mkdir -Force $out_file_dir  | Out-Null
-    $Secret | gpg $gpg_args 2> $null
+    $Secret | gpg $gpg_args
+    if (!$?) { throw "Gpg exit code: $LastExitCode" }
 }
+
+<#
+.SYNOPSIS
+   Simulates pass linux password manager
+.LINK
+    https://passwordstore.org
+#>
+function Use-Pass() {
+    if ($args.Count -gt 0) {$cmd = $args[0]}
+    
+    if ($cmd -eq 'insert') {
+        Add-Secret $args[1]
+        return
+    }
+
+    if ($cmd -eq 'generate') {
+        [Reflection.Assembly]::LoadWithPartialName("System.Web") | Out-Null
+        $len = if ($args[2]) {$args[2]} else {15}
+        [System.Web.Security.Membership]::GeneratePassword($len, 2) | Add-Secret $args[1]
+        return
+    }
+
+    if ($cmd -eq 'rm') { Remove-Secret $args[1]; return }
+
+    Show-Secret $cmd
+}
+sal pass Use-Pass
