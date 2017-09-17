@@ -5,6 +5,8 @@
 .DESCRIPTION
     Show encrypted secret on console. Use passphrase if private key
     or symmetric encryption require it.
+
+    Called without any parameters it shows tree of the password store
 #>
 
 function Show-Secret() {
@@ -26,6 +28,10 @@ function Show-Secret() {
         [switch] $Clipboard
     )
 
+    if (!$Path) {
+        tree.com /F $PasswordStore; return
+    }
+
     $secret_file = (Join-Path $PasswordStore $Path) + '.gpg'
     if (!(Test-Path $secret_file)) { throw "Secret not found: $Path" }
     
@@ -34,7 +40,12 @@ function Show-Secret() {
     $gpg_args += '--decrypt', $secret_file
 
     $out = gc $secret_file -Raw | gpg $gpg_args 2> $null
-    if ($Clipboard) { $out | Set-Clipboard; Start-Job { sleep 45; $null | clip } } else { $out }
+    if ($Clipboard) { 
+        $out | Set-Clipboard
+        Remove-Job pass -ea 0 -Force
+        Start-Job -Name pass { sleep 45; $null | clip } 
+    } 
+    else { $out }
 }
 
 <#
@@ -122,5 +133,3 @@ function Add-Secret {
     mkdir -Force $out_file_dir  | Out-Null
     $Secret | gpg $gpg_args 2> $null
 }
-
-Show-Secret -Path secret -Passphrase 'some password' -Clipboard
