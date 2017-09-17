@@ -1,10 +1,7 @@
 # pass
+
 Pass for windows using Powershell
 
-
-#show: pass Email/zx2c4.com
-#clip: pass -c Email/zx2c4.com
-#delete: pass rm Business/cheese-whiz-factory
 #https://git.zx2c4.com/password-store/about/
 
 
