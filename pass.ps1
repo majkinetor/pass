@@ -3,7 +3,8 @@
     Show secret from the pass store
 
 .DESCRIPTION
-
+    Show encrypted secret on console. Use passphrase if private key
+    or symmetric encryption require it.
 #>
 
 function Show-Secret() {
