@@ -1,15 +1,39 @@
 # pass
 
-Pass for windows using Powershell
+[Pass](https://passwordstore.org) compatible Powershell module. It allows encryption of secrets using GpG in a
+directory structure that is convinient to put in a repository. 
 
-#https://git.zx2c4.com/password-store/about/
+## Prerequisites
 
+- gpg: `cinst gpg4win-vanilla`
+- To advanced password generation install [MlkPwgen] module: `Install-Package MlkPwgen -Force`
 
-- pass insert Business/cheese-whiz-factory  
-Add-Secret Business/cheese-whiz-factory
-- pass generate Email/jasondonenfeld.com 15  
-New-Password 15 | Add-Password Email/jasondonenfeld.com
-- pass Email/zx2c4.com  
-Show-Secret Email/zx2c4.com  
-- pass -c Email/zx2c4.com
-Show-Secret Email/zx2c4.com -Clipboard
+## Usage
+
+First `mkdir ~\.password-store`. This is default directory and different one can be used.
+
+```powershell
+
+# Add secret
+'omg so much cheese what am i gonna do' | Add-Secret Business/cheese-whiz-factory
+
+# Generate password and add username and overwrite existing secret
+(New-PronounceablePassword -Length 20), 'Username: admin' -join "`n" | Add-Secret Business/cheese-whiz-factory -Force
+
+# Show secret and set 45s to clipboard
+Show-Secret Business/cheese-whiz-factory -Clipoard
+```
+
+Both summetric and using keys encryption is supported. `Add-Secret` takes recipients via `.gpg-id` files in the password store or via `$GpgId` array. It can encrypt using public keys or with passphrase instead (via`$Passphrase` argument).
+
+There is also quick and dirty `pass` function that implements the most basic pass syntax:
+
+```
+pass insert Business/cheese-whiz-factory  
+pass generate Email/jasondonenfeld.com 15  
+pass Email/zx2c4.com  
+```
+
+## Notes
+
+- For graphical interface see [pass-winmenu](https://github.com/Baggykiin/pass-winmenu). It can be installed with: `cinst pass-winmenu`.
