@@ -66,7 +66,7 @@ function Show-Secret() {
 
     $out = gc $secret_file -Raw | gpg $gpg_args 2> $null
     if ($Clipboard) { 
-        $out | Set-Clipboard
+        $out | clip
         Remove-Job pass -ea 0 -Force
         Start-Job -Name pass { sleep 45; $null | clip } 
     } 
