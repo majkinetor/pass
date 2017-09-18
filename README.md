@@ -10,7 +10,7 @@ directory structure that is convinient to put in a repository.
 
 ## Usage
 
-First `mkdir ~\.password-store`. This is default directory and different one can be used by setting `$Env:PASSWORD_STORE` variable.
+First `mkdir ~\.password-store`. This is default directory and different one can be used by setting `$Env:PASSWORD_STORE_DIR` variable.
 
 ```powershell
 

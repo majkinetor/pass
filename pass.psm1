@@ -12,7 +12,7 @@ function Remove-Secret() {
         # Path to existing password store, by default ~\.password-store
         [ValidateNotNullOrEmpty()]
         [ValidateScript( {Test-Path $_} )]
-        [string] $PasswordStore = "$HOME\.password-store"
+        [string] $PasswordStore = $Env:PASSWORD_STORE_DIR
     )
     if ('.','\.','/.' -contains $Path.Trim()) { throw 'Can not remove entire password store' }
     if ($Path -match '\.\.') { throw 'Can not use .. when removing' }
@@ -40,10 +40,10 @@ function Show-Secret() {
         # Path within password store
         [string] $Path, 
 
-        # Path to existing password store, by default $Env:PASSWORD_STORE
+        # Path to existing password store, by default $Env:PASSWORD_STORE_DIR
         [ValidateNotNullOrEmpty()]
         [ValidateScript( {Test-Path $_} )]
-        [string] $PasswordStore = $Env:PASSWORD_STORE, 
+        [string] $PasswordStore = $Env:PASSWORD_STORE_DIR, 
 
         #[Parameter(ParameterSetName = 'passphrase')] 
         # Gpg passphrase used for private key access or symmetric encryption
@@ -117,10 +117,10 @@ function Add-Secret {
         [Parameter(ValueFromPipeline = $true, Mandatory = $true)]
         [string] $Secret, 
         
-        # Path to existing password store, by default $Env:PASSWORD_STORE
+        # Path to existing password store, by default $Env:PASSWORD_STORE_DIR
         [ValidateNotNullOrEmpty()]
         [ValidateScript( {Test-Path $_} )]
-        [string] $PasswordStore = $Env:PASSWORD_STORE,
+        [string] $PasswordStore = $Env:PASSWORD_STORE_DIR,
         
         # Gpg IDs of recipients used to encrypt password file, if empty '.gpg-id' file is used
         [Parameter(ParameterSetName = 'gpgid')]
@@ -193,6 +193,6 @@ function Use-Pass() {
 }
 sal pass Use-Pass
 
-if (!$Env:PASSWORD_STORE) { $Env:PASSWORD_STORE = Join-Path $HOME '.password-store' }
+if (!$Env:PASSWORD_STORE_DIR) { $Env:PASSWORD_STORE_DIR = Join-Path $HOME '.password-store' }
 
-Write-Host -Foreground green "Using password store:" $Env:PASSWORD_STORE
+Write-Host -Foreground green "Using password store:" $Env:PASSWORD_STORE_DIR
