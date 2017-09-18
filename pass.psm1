@@ -50,7 +50,10 @@ function Show-Secret() {
         [string] $Passphrase, 
 
         # Copy secret to clipboard and clean after 45s
-        [switch] $Clipboard
+        [switch] $Clipboard, 
+
+        # Return only first line from the secret
+        [switch] $FirstLine
     )
 
     if (!$Path) {
@@ -65,6 +68,8 @@ function Show-Secret() {
     $gpg_args += '--decrypt', $secret_file
 
     $out = gc $secret_file -Raw | gpg $gpg_args 2> $null
+    if ($FirstLine) { $out = $out | select -First 1}
+
     if ($Clipboard) { 
         $out | clip
         Remove-Job pass -ea 0 -Force
@@ -72,6 +77,7 @@ function Show-Secret() {
     } 
     else { $out }
 }
+sal Get-Secret Show-Secret
 
 <#
 .SYNOPSIS
@@ -161,7 +167,7 @@ function Add-Secret {
     $gpg_args += if ($PsCmdlet.ParameterSetName -eq 'passphrase') {'--passphrase', """$Passphrase""", '--symmetric'} else {'--encrypt'} 
     Write-Verbose "gpg $gpg_args"
 
-    mkdir -Force $out_file_dir  | Out-Null
+    New-Item -ItemType Directory -Force $out_file_dir  | Out-Null
     $Secret | gpg $gpg_args
     if (!$?) { throw "Gpg exit code: $LastExitCode" }
 }
@@ -192,6 +198,8 @@ function Use-Pass() {
     Show-Secret $cmd
 }
 sal pass Use-Pass
+
+$ErrorActionPreference = 'Continue' # gpg warnings fail scritps when EA is stop.
 
 if (!$Env:PASSWORD_STORE_DIR) { $Env:PASSWORD_STORE_DIR = Join-Path $HOME '.password-store' }
 

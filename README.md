@@ -23,8 +23,8 @@ import-module pass
 "$(New-PronounceablePassword -Length 20)
 Username: admin" | Add-Secret Business/cheese-whiz-factory -Force
 
-# Show secret and set 45s to clipboard
-Show-Secret Business/cheese-whiz-factory -Clipboard
+# Show only first line of the secret (password) and set 45s to clipboard
+Show-Secret Business/cheese-whiz-factory -Clipboard -FirstLine
 
 # Show directory tree
 Show-Secret
