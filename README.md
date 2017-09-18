@@ -6,7 +6,7 @@ directory structure that is convinient to put in a repository.
 ## Prerequisites
 
 - gpg: `cinst gpg4win-vanilla`
-- To advanced password generation install [MlkPwgen](https://github.com/mkropat/MlkPwgen) module: `Install-Package MlkPwgen -Force`
+- For advanced password generation install [MlkPwgen](https://github.com/mkropat/MlkPwgen) module: `Install-Package MlkPwgen -Force`
 
 ## Usage
 
