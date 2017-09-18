@@ -40,10 +40,10 @@ function Show-Secret() {
         # Path within password store
         [string] $Path, 
 
-        # Path to existing password store, by default ~\.password-store
+        # Path to existing password store, by default $Env:PASSWORD_STORE
         [ValidateNotNullOrEmpty()]
         [ValidateScript( {Test-Path $_} )]
-        [string] $PasswordStore = "$HOME\.password-store", 
+        [string] $PasswordStore = $Env:PASSWORD_STORE, 
 
         #[Parameter(ParameterSetName = 'passphrase')] 
         # Gpg passphrase used for private key access or symmetric encryption
@@ -117,10 +117,10 @@ function Add-Secret {
         [Parameter(ValueFromPipeline = $true, Mandatory = $true)]
         [string] $Secret, 
         
-        # Path to existing password store, by default ~\.password-store
+        # Path to existing password store, by default $Env:PASSWORD_STORE
         [ValidateNotNullOrEmpty()]
         [ValidateScript( {Test-Path $_} )]
-        [string] $PasswordStore = "$HOME\.password-store", 
+        [string] $PasswordStore = $Env:PASSWORD_STORE,
         
         # Gpg IDs of recipients used to encrypt password file, if empty '.gpg-id' file is used
         [Parameter(ParameterSetName = 'gpgid')]
@@ -192,3 +192,7 @@ function Use-Pass() {
     Show-Secret $cmd
 }
 sal pass Use-Pass
+
+if (!$Env:PASSWORD_STORE) { $Env:PASSWORD_STORE = Join-Path $HOME '.password-store' }
+
+Write-Host -Foreground green "Using password store:" $Env:PASSWORD_STORE

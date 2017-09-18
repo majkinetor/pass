@@ -10,7 +10,7 @@ directory structure that is convinient to put in a repository.
 
 ## Usage
 
-First `mkdir ~\.password-store`. This is default directory and different one can be used.
+First `mkdir ~\.password-store`. This is default directory and different one can be used by setting `$Env:PASSWORD_STORE` variable.
 
 ```powershell
 
@@ -20,7 +20,8 @@ import-module pass
 'omg so much cheese what am i gonna do' | Add-Secret Business/cheese-whiz-factory
 
 # Generate password and add username and overwrite existing secret
-(New-PronounceablePassword -Length 20), 'Username: admin' -join "`n" | Add-Secret Business/cheese-whiz-factory -Force
+"$(New-PronounceablePassword -Length 20)
+Username: admin" | Add-Secret Business/cheese-whiz-factory -Force
 
 # Show secret and set 45s to clipboard
 Show-Secret Business/cheese-whiz-factory -Clipboard
