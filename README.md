@@ -1,11 +1,12 @@
 # pass
 
 [Pass](https://passwordstore.org) compatible Powershell module. It allows encryption of secrets using GpG in a
-directory structure that is convinient to put in a repository. 
+directory structure that is convinient to put in a repository.  Module works cross-platfrom.
 
 ## Prerequisites
 
-- gpg: `cinst gpg4win-vanilla`
+- `gpg` on the PATH: 
+    - WIndows: `cinst gpg4win-vanilla`
 - For advanced password generation install [MlkPwgen](https://github.com/mkropat/MlkPwgen) module: `Install-Package MlkPwgen -Force`
 
 ## Usage

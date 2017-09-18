@@ -57,7 +57,8 @@ function Show-Secret() {
     )
 
     if (!$Path) {
-        tree.com /F $PasswordStore; return
+        if ($PSVersionTable.Platform -eq 'Windows') { tree.com /F $PasswordStore }
+        return
     }
 
     $secret_file = (Join-Path $PasswordStore $Path) + '.gpg'
