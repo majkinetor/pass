@@ -6,12 +6,12 @@ directory structure that is convinient to put in a repository.  Module works cro
 ## Prerequisites
 
 - `gpg` on the PATH: 
-    - WIndows: `cinst gpg4win-vanilla`
+    - Windows: `cinst gpg4win-vanilla`
 - For advanced password generation install [MlkPwgen](https://github.com/mkropat/MlkPwgen) module: `Install-Package MlkPwgen -Force`
 
 ## Usage
 
-First `mkdir ~\.password-store`. This is default directory and different one can be used by setting `$Env:PASSWORD_STORE_DIR` variable.
+First `mkdir ~/.password-store`. This is default directory and different one can be used by setting `$Env:PASSWORD_STORE_DIR` variable.
 
 ```powershell
 
