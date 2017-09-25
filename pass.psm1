@@ -57,7 +57,7 @@ function Show-Secret() {
     )
 
     if (!$Path) {
-        if ($PSVersionTable.Platform -eq 'Windows') { tree.com /F $PasswordStore }
+        if ($PSVersionTable.Platform -in $null,'','Windows') { tree.com /F $PasswordStore }
         return
     }
 
@@ -69,6 +69,7 @@ function Show-Secret() {
     $gpg_args += '--decrypt', $secret_file
 
     $out = gc $secret_file -Raw | gpg $gpg_args 2> $null
+    if ($LastExitCode) { throw "GPG exit code: $LastExitCode"}
     if ($FirstLine) { $out = $out | select -First 1}
 
     if ($Clipboard) { 
@@ -170,7 +171,7 @@ function Add-Secret {
 
     New-Item -ItemType Directory -Force $out_file_dir  | Out-Null
     $Secret | gpg $gpg_args
-    if (!$?) { throw "Gpg exit code: $LastExitCode" }
+    if ($LastExitCode) { throw "GPG exit code: $LastExitCode" }
 }
 
 <#
