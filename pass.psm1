@@ -46,8 +46,8 @@ function Show-Secret() {
         [string] $PasswordStore = $Env:PASSWORD_STORE_DIR, 
 
         #[Parameter(ParameterSetName = 'passphrase')] 
-        # Gpg passphrase used for private key access or symmetric encryption
-        [string] $Passphrase, 
+        # Gpg passphrase used for private key access or symmetric encryption,, by default $Env:PASSWORD_STORE_PHRASE
+        [string] $Passphrase = $Env:PASSWORD_STORE_PHRASE, 
 
         # Copy secret to clipboard and clean after 45s
         [switch] $Clipboard, 
@@ -135,8 +135,8 @@ function Add-Secret {
         [string[]] $GpgId, 
 
         [Parameter(ParameterSetName = 'passphrase')] 
-        # Gpg passphrase used for symmetric encryption
-        [string] $Passphrase, 
+        # Gpg passphrase used for symmetric encryption, by default $Env:PASSWORD_STORE_PHRASE
+        [string] $Passphrase = $Env:PASSWORD_STORE_PHRASE, 
 
         # Use to overwrite existing secrets
         [switch] $Force
