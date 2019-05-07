@@ -67,6 +67,7 @@ function Show-Secret() {
     $gpg_args = '--batch', '--yes', '--quiet'
     $gpg_args += if ($Passphrase) { '--passphrase', $Passphrase }
     $gpg_args += '--decrypt', $secret_file
+    Write-Verbose "gpg $gpg_args"
 
     $out = gc $secret_file -Raw | gpg $gpg_args 2> $null
     if ($LastExitCode) { throw "GPG exit code: $LastExitCode"}
