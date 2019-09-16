@@ -6,7 +6,7 @@ directory structure that is convinient to put in a repository.  Module works cro
 ## Prerequisites
 
 - `gpg` on the PATH: 
-    - Windows: `cinst gpg4win-vanilla`
+    - Windows (using Chocolatey): `cinst gnupg`
 - For advanced password generation install [MlkPwgen](https://github.com/mkropat/MlkPwgen) module: `Install-Package MlkPwgen -Force`
 
 ## Usage
