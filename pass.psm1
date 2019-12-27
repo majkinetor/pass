@@ -64,7 +64,7 @@ function Show-Secret() {
     $secret_file = (Join-Path $PasswordStore $Path) + '.gpg'
     if (!(Test-Path $secret_file)) { throw "Secret not found: $Path" }
     
-    $gpg_args = '--batch', '--yes', '--quiet'
+    $gpg_args = '--batch', '--yes', '--quiet', '--ignore-mdc-error'
     $gpg_args += if ($Passphrase) { '--passphrase', $Passphrase }
     $gpg_args += '--decrypt', $secret_file
     Write-Verbose "gpg $gpg_args"
